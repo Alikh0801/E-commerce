@@ -1,0 +1,19 @@
+# Paketlər (Yükləməyə ehtiyac yoxdur, hər kəs npm install ilə özünə yükləyir)
+node_modules/
+
+# Məxfi məlumatlar (Database linkləri, JWT key-ləri - ƏN VACİBİ)
+.env
+
+# Debug və log faylları
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Əməliyyat sistemi faylları
+.DS_Store
+Thumbs.db
+
+# Build qovluğu (əgər gələcəkdə TypeScript və ya build istifadə etsən)
+dist/
+build/
