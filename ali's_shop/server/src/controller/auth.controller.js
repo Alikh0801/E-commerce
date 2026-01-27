@@ -88,10 +88,16 @@ const login = async (req, res) => {
             { expiresIn: '1d' }
         )
 
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: config.node_env === 'production',
+            sameSite: 'lax',
+            maxAge: 1 * 24 * 60 * 60 * 1000 // 1 day
+        });
+
         return res.status(200).json({
             ok: true,
             message: 'login successful',
-            token,
             user: {
                 id: foundUser._id,
                 fullName: foundUser.fullName,
@@ -107,7 +113,24 @@ const login = async (req, res) => {
     }
 }
 
+const getMe = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user.id).select('-password');
+
+        res.status(200).json({
+            ok: true,
+            user
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: 'Internal server error'
+        });
+    }
+}
+
 module.exports = {
     register,
-    login
+    login,
+    getMe
 }
