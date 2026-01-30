@@ -129,8 +129,30 @@ const getMe = async (req, res) => {
     }
 }
 
+const logout = async (req, res) => {
+    try {
+        res.cookie('token', '', {
+            httpOnly: true,
+            expires: new Date(0),
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax'
+        });
+
+        res.status(200).json({
+            ok: true,
+            message: 'Logged out successfully'
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: 'Logout failed'
+        })
+    }
+}
+
 module.exports = {
     register,
     login,
-    getMe
+    getMe,
+    logout
 }

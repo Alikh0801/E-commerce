@@ -1,8 +1,31 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+
+    // Login submit
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        const result = await login({ email, password });
+
+        if (result && result.ok) {
+            navigate('/');
+        } else {
+            setError(result.message || 'Giriş zamanı xəta baş verdi!');
+        }
+    };
 
     return (
         <div className="min-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-50 px-4">
@@ -14,7 +37,7 @@ function LoginPage() {
                     <p className="text-gray-500 mt-2">Davam etmək üçün hesabınıza daxil olun</p>
                 </div>
 
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
 
                     {/* Email */}
 
@@ -28,7 +51,10 @@ function LoginPage() {
                                 type="email"
                                 required
                                 placeholder="xxxx@gmail.com"
-                                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all" />
+                                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </div>
                     </div>
 
@@ -42,7 +68,10 @@ function LoginPage() {
                                 type={showPassword ? "text" : "password"}
                                 required
                                 placeholder="••••••••"
-                                className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all" />
+                                className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
@@ -66,8 +95,17 @@ function LoginPage() {
                         <label htmlFor="remember" className="ml-2 text-sm text-gray-600">Məni xatırla</label>
                     </div>
 
+                    {/* Error message */}
+                    {error && (
+                        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-md flex items-center gap-3 animate-shake">
+                            <span className="text-red-700 text-sm font-medium">{error}</span>
+                        </div>
+                    )}
+
                     {/* Daxil Ol Butonu */}
-                    <button className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-orange-600 transform transition-all active:scale-[0.98] shadow-lg shadow-orange-100">
+                    <button
+                        type='submit'
+                        className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-orange-600 transform transition-all active:scale-[0.98] shadow-lg shadow-orange-100">
                         Daxil Ol
                     </button>
                 </form>

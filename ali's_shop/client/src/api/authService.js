@@ -12,3 +12,7 @@ export const loginUser = (credentials) => {
 export const getMe = () => {
     return api.get('/auth/me')
 };
+
+export const logoutUser = () => {
+    return api.post('/auth/logout');
+}
