@@ -1,8 +1,56 @@
 import React, { useState } from 'react';
 import { Mail, Lock, User, Phone, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
+
+    const { register } = useAuth();
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phone: '',
+        password: ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        const cleanPhone = formData.phone.replace(/\s+/g, '')
+        const phoneRegex = /^(50|51|55|70|77|99|10|60)\d{7}$/;
+
+        if (!phoneRegex.test(cleanPhone)) {
+            setError('Mobil nömrə və ya operator kodu yanlışdır!(Məs: 501234567)')
+            return;
+        }
+
+        if (formData.password.length < 8) {
+            setError('Şifrə 8 simvoldan az olmamalıdır!');
+            return;
+        }
+
+        const finalData = {
+            ...formData,
+            phone: `+994${cleanPhone}`
+        };
+
+        const result = await register(finalData);
+
+        if (result.ok) {
+            navigate('/')
+        } else {
+            setError(result.message || 'Qeydiyyat zamanı xəta baş verdi!')
+        }
+    };
 
     return (
         <div className="min-h-[calc(100vh-80px)] overflow-y-auto flex items-center justify-center bg-gray-50 py-12 px-4">
@@ -13,13 +61,23 @@ function RegisterPage() {
                     <p className="text-gray-500 mt-2">Sürətli alış-veriş üçün qeydiyyatdan keçin</p>
                 </div>
 
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleSubmit}>
+
+                    {error && (
+                        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 text-red-700 text-sm rounded">
+                            {error}
+                        </div>
+                    )}
+
                     {/* Fullname */}
                     <div className="flex flex-col">
                         <label className="text-sm font-medium text-gray-700 mb-2">Ad və Soyad</label>
                         <div className="relative">
                             <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                             <input
+                                name='fullName'
+                                value={formData.fullName}
+                                onChange={handleChange}
                                 type="text"
                                 required
                                 placeholder="Ad və Soyad məlumatlarınızı daxil edin"
@@ -34,6 +92,9 @@ function RegisterPage() {
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                             <input
+                                name='email'
+                                value={formData.email}
+                                onChange={handleChange}
                                 type="email"
                                 placeholder="xxxx@gmail.comm"
                                 className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
@@ -51,6 +112,9 @@ function RegisterPage() {
                                 +994
                             </span>
                             <input
+                                name='phone'
+                                value={formData.phone}
+                                onChange={handleChange}
                                 type="tel"
                                 required
                                 placeholder="50 000 00 00"
@@ -65,6 +129,9 @@ function RegisterPage() {
                         <div className="relative">
                             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                             <input
+                                name='password'
+                                value={formData.password}
+                                onChange={handleChange}
                                 type={showPassword ? "text" : "password"}
                                 placeholder="••••••••"
                                 className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"

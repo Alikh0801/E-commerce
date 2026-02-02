@@ -16,22 +16,17 @@ function Category() {
                 <ul className="bg-white border border-gray-200 shadow-xl rounded-lg py-2">
                     <li>
                         <a href="/kisi-geyim" className="block px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                            Kişi Geyimi
+                            Kişi Ətirləri
                         </a>
                     </li>
                     <li>
                         <a href="/qadin-geyim" className="block px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                            Qadın Geyimi
+                            Qadın Ətirləri
                         </a>
                     </li>
                     <li>
                         <a href="/kisi-ayaqqabi" className="block px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                            Kişi Ayaqqabıları
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/qadin-ayaqqabi" className="block px-4 py-2 hover:bg-orange-50 hover:text-orange-600 transition-colors">
-                            Qadın Ayaqqabıları
+                            Unisex Ətirlər
                         </a>
                     </li>
                 </ul>

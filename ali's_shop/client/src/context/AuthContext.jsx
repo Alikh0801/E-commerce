@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import { getMe, loginUser, logoutUser } from '../api/authService';
+import { getMe, loginUser, logoutUser, registerUser } from '../api/authService';
 
 
 const authContext = createContext();
@@ -44,6 +44,26 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    //registeration
+    const register = async (userData) => {
+        try {
+            const response = await registerUser(userData)
+
+            if (response.data.ok) {
+                setUser(response.data.user)
+                return response.data
+            }
+
+            return response.data;
+
+        } catch (error) {
+            return {
+                ok: false,
+                message: error.response?.data?.message || 'Qeydiyyat zamanı xəta baş verdi!'
+            }
+        }
+    }
+
     // logout
     const logout = async () => {
         try {
@@ -56,7 +76,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <authContext.Provider value={{ user, login, logout }}>
+        <authContext.Provider value={{ user, login, logout, register }}>
             {!loading && children}
         </authContext.Provider>
     );

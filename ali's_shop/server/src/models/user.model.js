@@ -17,13 +17,15 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: [true, 'Mobil nömrənizi daxil edin'],
-        trim: true
+        trim: true,
+        unique: true
     },
     password: {
         type: String,
         required: [true, 'Şifrənizi daxil edin'],
         minlength: [8, 'Şifrə 8 simvoldan az olmamalıdır'],
-        select: false
+        select: false,
+        trim: true
     },
     role: {
         type: String,

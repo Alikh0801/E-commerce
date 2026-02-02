@@ -17,7 +17,7 @@ function Navbar() {
             <div className="w-full px-12 py-5 flex items-center justify-between gap-8">
                 <div className="flex items-center flex-1 gap-6">
                     <a href="/" className="shrink-0">
-                        <img src="./images/logo/logo.png" alt="Logo" className="w-18 h-18 object-contain" />
+                        <h1>A&Z Perfumery</h1>
                     </a>
                     <Category />
                     <div className="flex-1 max-w-4xl">
