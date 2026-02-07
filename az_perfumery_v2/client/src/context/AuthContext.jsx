@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import { getMe, loginUser, logoutUser, registerUser } from '../api/authService';
+import { getMe, loginUser, logoutUser, registerUser, verifyEmail } from '../api/authService';
 
 
 const authContext = createContext();
@@ -48,10 +48,24 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         try {
             const response = await registerUser(userData)
+            return response.data;
+
+        } catch (error) {
+            return {
+                ok: false,
+                message: error.response?.data?.message || 'Qeydiyyat zamanı xəta baş verdi!'
+            }
+        }
+    }
+
+    //OTP verify
+    const verify = async (verifyData) => {
+        try {
+
+            const response = await verifyEmail(verifyData);
 
             if (response.data.ok) {
-                setUser(response.data.user)
-                return response.data
+                setUser(response.data.user);
             }
 
             return response.data;
@@ -59,7 +73,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             return {
                 ok: false,
-                message: error.response?.data?.message || 'Qeydiyyat zamanı xəta baş verdi!'
+                message: error.response?.data?.message || 'Kod yanlışdır!'
             }
         }
     }
@@ -76,7 +90,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <authContext.Provider value={{ user, login, logout, register }}>
+        <authContext.Provider value={{ user, login, logout, register, verify }}>
             {!loading && children}
         </authContext.Provider>
     );

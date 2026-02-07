@@ -5,6 +5,10 @@ export const registerUser = (userData) => {
     return api.post('/auth/register', userData)
 };
 
+export const verifyEmail = (data) => {
+    return api.post('/auth/verify-email', data);
+}
+
 export const loginUser = (credentials) => {
     return api.post('/auth/login', credentials)
 };

@@ -2,22 +2,17 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/user.model');
 const config = require('../config');
+const sendEmail = require('../utils/sendEmail');
 
 const register = async (req, res) => {
     try {
         const { fullName, email, phone, password } = req.body;
 
-        // 1. İlkin yoxlamalar (Bütün xanalar doldurulubmu?)
+        // 1. Validasiyalar
         if (!fullName || !email || !phone || !password) {
             return res.status(400).json({ ok: false, message: 'Bütün xanaları doldurun!' });
         }
 
-        // 2. Şifrə uzunluğu
-        if (password.length < 8) {
-            return res.status(400).json({ ok: false, message: 'Şifrə 8 simvoldan az olmamalıdır!' });
-        }
-
-        // 3. Nömrənin təmizlənməsi və formatı
         const cleanPhone = phone.replace(/\s+/g, '').replace('+994', '');
         const finalPhone = `+994${cleanPhone}`;
         const azPhoneRegex = /^\+994(50|51|55|70|77|99|10|60)\d{7}$/;
@@ -26,55 +21,110 @@ const register = async (req, res) => {
             return res.status(400).json({ ok: false, message: 'Düzgün mobil nömrə daxil edin' });
         }
 
-        // 4. Dublikat yoxlanışı (Email və ya Telefon)
+        // 2. Bazada mövcudluğunu yoxla
         const userExists = await userModel.findOne({
             $or: [{ email }, { phone: finalPhone }]
         });
 
         if (userExists) {
-            const isEmail = userExists.email === email;
             return res.status(400).json({
                 ok: false,
-                message: isEmail ? 'Bu email artıq istifadə olunub!' : 'Bu nömrə artıq qeydiyyatdan keçib!'
+                message: userExists.email === email ? 'Bu email artıq istifadə olunub!' : 'Bu nömrə artıq qeydiyyatdan keçib!'
             });
         }
 
-        // 5. Şifrənin hash-lənməsi və bazaya yazılma
+        // 3. Müvəqqəti OTP və Şifrələmə
+        const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new userModel({
-            fullName,
+
+        // 4. Məlumatları JWT daxilinə bükürük (Müvəqqəti baza rolunu oynayır)
+        // Bu token 2 dəqiqə ərzində keçərlidir
+        const signupData = { fullName, email, phone: finalPhone, password: hashedPassword, otpCode };
+        const signupToken = jwt.sign(signupData, config.jwt_secret, { expiresIn: '2m' });
+
+        // 5. Email göndər
+        const message = `
+            <div style="font-family: sans-serif; border: 1px solid #eee; padding: 20px;">
+                <h2>E-mail Təsdiqləmə</h2>
+                <p>Hörmətli ${fullName}, qeydiyyatı tamamlamaq üçün təsdiq kodunuz:</p>
+                <h1 style="color: #4CAF50; letter-spacing: 5px;">${otpCode}</h1>
+                <p>Bu kod 2 dəqiqə ərzində keçərlidir.</p>
+            </div>
+        `;
+
+        await sendEmail({
             email,
-            phone: finalPhone,
-            password: hashedPassword
+            subject: 'Hesab Təsdiqləmə Kodu',
+            message
         });
+
+        res.status(200).json({
+            ok: true,
+            message: 'Təsdiq kodu email ünvanınıza göndərildi!',
+            signupToken, // Frontend bunu Verify sehifesine oturmelidir
+            email
+        });
+
+    } catch (error) {
+        res.status(500).json({ ok: false, message: error.message });
+    }
+};
+
+const verifyEmail = async (req, res) => {
+    try {
+        const { code, signupToken } = req.body;
+
+        if (!signupToken) {
+            return res.status(400).json({ ok: false, message: 'Müvəqqəti qeydiyyat vaxtınız bitib!' });
+        }
+
+        // 1. Tokeni deşifrə edirik
+        let decoded;
+        try {
+            decoded = jwt.verify(signupToken, config.jwt_secret);
+        } catch (err) {
+            return res.status(400).json({ ok: false, message: 'Vaxt bitib, yenidən qeydiyyatdan keçin.' });
+        }
+
+        // 2. OTP kodunu yoxla
+        if (decoded.otpCode !== code) {
+            return res.status(400).json({ ok: false, message: 'Daxil etdiyiniz kod yanlışdır!' });
+        }
+
+        // 3. HƏR ŞEY DÜZDÜRSƏ: İndi bazaya yazırıq
+        const newUser = new userModel({
+            fullName: decoded.fullName,
+            email: decoded.email,
+            phone: decoded.phone,
+            password: decoded.password,
+            isVerified: true // Artıq birbaşa təsdiqlənmiş olur
+        });
+
         await newUser.save();
 
-        // 6. Token və Cookie təyini
-        const token = jwt.sign({ id: newUser._id }, config.jwt_secret, { expiresIn: '1d' });
+        // 4. Giriş Tokeni (Login üçün)
+        const token = jwt.sign(
+            { id: newUser._id },
+            config.jwt_secret,
+            { expiresIn: '1d' }
+        );
 
         res.cookie('token', token, {
             httpOnly: true,
             secure: config.node_env === 'production',
-            sameSite: 'lax',
-            maxAge: 24 * 60 * 60 * 1000
+            maxAge: 1 * 24 * 60 * 60 * 1000
         });
+
+        const userResponse = newUser.toObject();
+        delete userResponse.password;
 
         res.status(201).json({
             ok: true,
-            message: 'Qeydiyyat uğurla tamamlandı',
-            user: {
-                id: newUser._id,
-                fullName: newUser.fullName,
-                email: newUser.email,
-                phone: newUser.phone
-            }
+            message: 'Təbriklər, qeydiyyat tamamlandı!',
+            user: userResponse
         });
 
     } catch (error) {
-        if (error.name === 'ValidationError') {
-            const message = Object.values(error.errors).map(val => val.message);
-            return res.status(400).json({ ok: false, message: message[0] });
-        }
         res.status(500).json({ ok: false, message: error.message });
     }
 };
@@ -97,6 +147,13 @@ const login = async (req, res) => {
                 ok: false,
                 message: 'E-mail və ya şifrə yanlışdır!'
             })
+        }
+
+        if (!foundUser.isVerified) {
+            return res.status(401).json({
+                ok: false,
+                message: 'Zəhmət olmasa, əvvəlcə email ünvanınızı təsdiqləyin!'
+            });
         }
 
         const isMatch = await bcrypt.compare(password, foundUser.password);
@@ -160,7 +217,7 @@ const logout = async (req, res) => {
         res.cookie('token', '', {
             httpOnly: true,
             expires: new Date(0),
-            secure: process.env.NODE_ENV === 'production',
+            secure: config.node_env === 'production',
             sameSite: 'lax'
         });
 
@@ -180,5 +237,6 @@ module.exports = {
     register,
     login,
     getMe,
-    logout
+    logout,
+    verifyEmail
 }

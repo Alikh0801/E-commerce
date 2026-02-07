@@ -3,6 +3,7 @@ import Layout from '../components/layout/Layout';
 import Home from '../pages/Home';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
+import VerifyEmail from '../pages/VerifyEmail';
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             {
                 path: "/register",
                 element: <RegisterPage />
+            },
+            {
+                path: "/verify-email",
+                element: <VerifyEmail />
             }
         ]
     }

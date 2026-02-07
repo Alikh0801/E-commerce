@@ -46,7 +46,12 @@ function RegisterPage() {
         const result = await register(finalData);
 
         if (result.ok) {
-            navigate('/')
+            navigate('/verify-email', {
+                state: {
+                    email: formData.email,
+                    signupToken: result.signupToken
+                }
+            });
         } else {
             setError(result.message || 'Qeydiyyat zamanı xəta baş verdi!')
         }
