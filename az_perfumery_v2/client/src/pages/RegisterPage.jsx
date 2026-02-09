@@ -107,7 +107,7 @@ function RegisterPage() {
                         </div>
                     </div>
 
-                    {/* Telefon (Azərbaycan kodu mecburi) */}
+                    {/* Telefon (Azerbaycan kodu mecburi) */}
                     <div className="flex flex-col">
                         <label className="text-sm font-medium text-gray-700 mb-2">Mobil Telefon</label>
                         <div className="relative flex items-center">

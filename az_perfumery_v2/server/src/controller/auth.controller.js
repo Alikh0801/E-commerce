@@ -8,7 +8,6 @@ const register = async (req, res) => {
     try {
         const { fullName, email, phone, password } = req.body;
 
-        // 1. Validasiyalar
         if (!fullName || !email || !phone || !password) {
             return res.status(400).json({ ok: false, message: 'Bütün xanaları doldurun!' });
         }
@@ -21,7 +20,6 @@ const register = async (req, res) => {
             return res.status(400).json({ ok: false, message: 'Düzgün mobil nömrə daxil edin' });
         }
 
-        // 2. Bazada mövcudluğunu yoxla
         const userExists = await userModel.findOne({
             $or: [{ email }, { phone: finalPhone }]
         });
@@ -38,7 +36,6 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // 4. Məlumatları JWT daxilinə bükürük (Müvəqqəti baza rolunu oynayır)
-        // Bu token 2 dəqiqə ərzində keçərlidir
         const signupData = { fullName, email, phone: finalPhone, password: hashedPassword, otpCode };
         const signupToken = jwt.sign(signupData, config.jwt_secret, { expiresIn: '2m' });
 
@@ -91,18 +88,16 @@ const verifyEmail = async (req, res) => {
             return res.status(400).json({ ok: false, message: 'Daxil etdiyiniz kod yanlışdır!' });
         }
 
-        // 3. HƏR ŞEY DÜZDÜRSƏ: İndi bazaya yazırıq
         const newUser = new userModel({
             fullName: decoded.fullName,
             email: decoded.email,
             phone: decoded.phone,
             password: decoded.password,
-            isVerified: true // Artıq birbaşa təsdiqlənmiş olur
+            isVerified: true
         });
 
         await newUser.save();
 
-        // 4. Giriş Tokeni (Login üçün)
         const token = jwt.sign(
             { id: newUser._id },
             config.jwt_secret,
@@ -232,6 +227,8 @@ const logout = async (req, res) => {
         })
     }
 }
+
+
 
 module.exports = {
     register,
