@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import { getMe, loginUser, logoutUser, registerUser, verifyEmail } from '../api/authService';
+import { forgotPassword, getMe, loginUser, logoutUser, registerUser, resetPassword, verifyEmail } from '../api/authService';
 
 
 const authContext = createContext();
@@ -89,8 +89,34 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    //forgot-password
+    const sendForgotPasswordEmail = async (email) => {
+        try {
+            const response = await forgotPassword(email);
+            return response.data;
+        } catch (error) {
+            return {
+                ok: false,
+                message: error.response?.data?.message || "Email göndərilərkən xəta baş verdi"
+            };
+        }
+    };
+
+    //reset-password
+    const updatePassword = async (token, password) => {
+        try {
+            const response = await resetPassword(token, password);
+            return response.data;
+        } catch (error) {
+            return {
+                ok: false,
+                message: error.response?.data?.message || "Şifrə yenilənərkən xəta baş verdi"
+            };
+        }
+    };
+
     return (
-        <authContext.Provider value={{ user, login, logout, register, verify }}>
+        <authContext.Provider value={{ user, login, logout, register, verify, sendForgotPasswordEmail, updatePassword }}>
             {!loading && children}
         </authContext.Provider>
     );

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto')
 const userModel = require('../models/user.model');
 const config = require('../config');
 const sendEmail = require('../utils/sendEmail');
@@ -228,12 +229,102 @@ const logout = async (req, res) => {
     }
 }
 
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await userModel.findOne({ email });
 
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                message: 'Bu email ilə istifadəçi tapılmadı!'
+            });
+        }
+
+        if (user.resetPasswordExpires && user.resetPasswordExpires > Date.now() + 8 * 60 * 1000) {
+            // Əgər vaxtın bitməsinə hələ 8 dəqiqədən çox qalıbsa (yəni son 2 dəqiqə ərzində göndərilibsə)
+            return res.status(429).json({
+                ok: false,
+                message: 'Artıq bir bərpa linki göndərilib. Zəhmət olmasa 2 dəqiqə gözləyin.'
+            });
+        }
+
+        //Unikal token create
+        const resetToken = crypto.randomBytes(32).toString('hex')
+
+        //Tokeni sifreliyib bazaya yaziriq
+        user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        user.resetPasswordExpires = Date.now() + 10 * 60 * 1000; // 10deq
+
+        await user.save();
+
+        const resetUrl = `${req.protocol}://${req.get('host').includes('localhost') ? 'localhost:5173' : req.get('host')}/reset-password/${resetToken}`;
+
+        const message = `
+            <h2>Şifrənin bərpası</h2>
+            <p>Şifrənizi yeniləmək üçün aşağıdakı linkə klikləyin:</p>
+            <a href="${resetUrl}">${resetUrl}</a>
+            <p>Bu link 10 dəqiqə ərzində keçərlidir.</p>
+        `;
+
+        await sendEmail({ email: user.email, subject: 'Şifrə bərpa linki', message });
+
+        res.status(200).json({
+            ok: true,
+            message: 'Bərpa linki emailinizə göndərildi!'
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: error.message
+        });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { password } = req.body;
+
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+        const user = await userModel.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                ok: false,
+                message: 'Link yanlışdır və ya vaxtı bitib!'
+            })
+        }
+
+        user.password = await bcrypt.hash(password, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.status(200).json({
+            ok: true,
+            message: 'Şifrəniz uğurla yeniləndi!'
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: error.message
+        })
+    }
+}
 
 module.exports = {
     register,
     login,
     getMe,
     logout,
-    verifyEmail
+    verifyEmail,
+    forgotPassword,
+    resetPassword
 }
