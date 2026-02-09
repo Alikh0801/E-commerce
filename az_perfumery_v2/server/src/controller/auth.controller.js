@@ -127,7 +127,7 @@ const verifyEmail = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, rememberMe } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({
@@ -161,17 +161,20 @@ const login = async (req, res) => {
             })
         }
 
+        const expireTime = rememberMe ? '7d' : '1d';
+        const cookieMaxAge = rememberMe ? 7 * 24 * 60 * 60 * 1000 : 1 * 24 * 60 * 60 * 1000;
+
         const token = jwt.sign(
             { id: foundUser._id },
             config.jwt_secret,
-            { expiresIn: '1d' }
+            { expiresIn: expireTime }
         )
 
         res.cookie('token', token, {
             httpOnly: true,
             secure: config.node_env === 'production',
             sameSite: 'lax',
-            maxAge: 1 * 24 * 60 * 60 * 1000 // 1 day
+            maxAge: cookieMaxAge
         });
 
         return res.status(200).json({

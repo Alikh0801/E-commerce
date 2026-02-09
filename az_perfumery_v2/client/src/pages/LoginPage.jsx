@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Link as LinkIcon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
 
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -18,7 +20,7 @@ function LoginPage() {
         e.preventDefault();
         setError('');
 
-        const result = await login({ email, password });
+        const result = await login({ email, password, rememberMe });
 
         if (result && result.ok) {
             navigate('/');
@@ -83,15 +85,21 @@ function LoginPage() {
                         {/* Forgot-password */}
 
                         <div className="flex justify-end mt-2">
-                            <a href="/forgot-password" className="text-sm text-orange-600 hover:underline transition-colors">
+                            <Link to="/forgot-password" className="text-sm text-orange-600 hover:underline transition-colors">
                                 Şifrəni unutmusunuz?
-                            </a>
+                            </Link>
                         </div>
                     </div>
 
                     {/* Remember Me */}
                     <div className="flex items-center">
-                        <input type="checkbox" id="remember" className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500" />
+                        <input
+                            type="checkbox"
+                            id="remember"
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                            className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                        />
                         <label htmlFor="remember" className="ml-2 text-sm text-gray-600">Məni xatırla</label>
                     </div>
 
@@ -114,7 +122,7 @@ function LoginPage() {
 
                 <p className="text-center mt-8 text-gray-600">
                     Hesabınız yoxdur?{' '}
-                    <a href="/register" className="text-orange-600 font-bold hover:underline">Qeydiyyatdan keçin</a>
+                    <Link to="/register" className="text-orange-600 font-bold hover:underline">Qeydiyyatdan keçin </Link>
                 </p>
             </div>
         </div>
