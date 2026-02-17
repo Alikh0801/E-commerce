@@ -115,8 +115,13 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    //uptade-user
+    const uptadeLocalUser = (uptadeData) => {
+        setUser(prev => ({ ...prev, ...uptadeData }));
+    }
+
     return (
-        <authContext.Provider value={{ user, login, logout, register, verify, sendForgotPasswordEmail, updatePassword }}>
+        <authContext.Provider value={{ user, login, logout, register, verify, sendForgotPasswordEmail, updatePassword, uptadeLocalUser }}>
             {!loading && children}
         </authContext.Provider>
     );

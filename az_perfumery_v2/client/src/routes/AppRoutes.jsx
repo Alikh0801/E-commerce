@@ -6,6 +6,9 @@ import RegisterPage from '../pages/RegisterPage';
 import VerifyEmail from '../pages/VerifyEmail';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
+import WishlistPage from '../pages/WishlistPage';
+import CartPage from '../pages/CartPage';
+import ProfilePage from '../pages/ProfilePage';
 
 const router = createBrowserRouter([
     {
@@ -35,6 +38,18 @@ const router = createBrowserRouter([
             {
                 path: "/reset-password/:token",
                 element: <ResetPassword />
+            },
+            {
+                path: "/wishlist",
+                element: <WishlistPage />
+            },
+            {
+                path: "/cart",
+                element: <CartPage />
+            },
+            {
+                path: "/profil-page",
+                element: <ProfilePage />
             }
         ]
     }

@@ -13,10 +13,10 @@ function Navbar() {
     const { user, logout } = useAuth();
 
     return (
-        <nav className="bg-white border-b border-gray-100 sticky top-0 z-100">
+        <nav className="bg-[linear-gradient(90deg,#000033_0%,#000066_100%)] border-b border-gray-100 sticky top-0 z-100">
             <div className="w-full px-12 py-5 flex items-center justify-between gap-8">
                 <div className="flex items-center flex-1 gap-6">
-                    <a href="/" className="shrink-0">
+                    <a href="/" className="shrink-0 text-[#F5F5DC]">
                         <h1>A&Z Perfumery</h1>
                     </a>
                     <Category />
@@ -34,7 +34,7 @@ function Navbar() {
                         <div className="relative group flex items-center gap-3 pl-4 border-l border-gray-100">
                             {/* user info (hidden the small screen) */}
                             <div className="hidden md:flex flex-col text-right">
-                                <span className="text-[13px] font-bold text-gray-900 leading-tight">
+                                <span className="text-[13px] font-bold text-[#F5F5DC] leading-tight">
                                     {user.fullName}
                                 </span>
                                 <span className="text-[11px] text-gray-400 font-medium">
@@ -44,9 +44,9 @@ function Navbar() {
 
                             {/* Avatar / Profil sekli konteyneri */}
                             <div className="relative cursor-pointer group">
-                                <div className="w-11 h-11 bg-linear-to-tr from-orange-500 to-amber-400 p-0.5 rounded-full transition-transform duration-300 group-hover:scale-110 shadow-lg shadow-orange-100">
+                                <div className="w-11 h-11 bg-linear-to-tr from-[#800000] to-amber-400 p-0.5 rounded-full transition-transform duration-300 group-hover:scale-110 shadow-lg">
                                     <div className="w-full h-full bg-white rounded-full flex items-center justify-center border-2 border-white overflow-hidden">
-                                        <span className="text-orange-600 font-black text-lg">
+                                        <span className="text-[#800000] font-black text-lg">
                                             {user.fullName[0].toUpperCase()}
                                         </span>
                                     </div>
@@ -62,9 +62,12 @@ function Navbar() {
                                         <p className="text-sm font-semibold text-gray-800 truncate">{user.email}</p>
                                     </div>
 
-                                    <a href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                                    <Link
+                                        to="/profil-page"
+                                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                                    >
                                         Profilim
-                                    </a>
+                                    </Link>
                                     <a href="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
                                         Ayarlar
                                     </a>
@@ -84,7 +87,7 @@ function Navbar() {
                         /* login button*/
                         <Link
                             to="/login"
-                            className="relative inline-flex items-center justify-center px-7 py-2.5 overflow-hidden font-medium text-white transition duration-300 ease-out bg-gray-900 rounded-full shadow-md group"
+                            className="relative inline-flex items-center justify-center px-7 py-2.5 overflow-hidden font-medium text-white transition duration-300 ease-out bg-[#064e3b] rounded-full shadow-md group"
                         >
                             <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-green-600 group-hover:translate-x-0 ease">
                                 <User size={18} />

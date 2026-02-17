@@ -322,6 +322,41 @@ const resetPassword = async (req, res) => {
     }
 }
 
+const uptadeMe = async (req, res) => {
+    try {
+        const { fullName } = req.body;
+
+        if (!fullName || fullName.trim().length < 3) {
+            return res.status(400).json({
+                ok: false,
+                message: 'Ad və Soyad ən azı 3 simvoldan ibarət olmalıdır!'
+            })
+        }
+
+        const updatedUser = await userModel.findByIdAndUpdate(
+            req.user.id,
+            { fullName: fullName.trim() },
+            { new: true, runValidators: true }
+        )
+
+        return res.status(200).json({
+            ok: true,
+            message: 'Profil məlumatları yeniləndi',
+            user: {
+                id: updatedUser._id,
+                fullName: updatedUser.fullName,
+                email: updatedUser.email
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: "Server xətası baş verdi!"
+        });
+    }
+}
+
 module.exports = {
     register,
     login,
@@ -329,5 +364,6 @@ module.exports = {
     logout,
     verifyEmail,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    uptadeMe
 }
