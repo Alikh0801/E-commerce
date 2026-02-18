@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 
 function CartPage() {
+
+    const { user, loading } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/login')
+        }
+    }, [user, loading, navigate]);
+
+    if (loading && !user) {
+        return null
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center justify-center">
             <ShoppingCart size={64} className="text-gray-300 mb-4" />

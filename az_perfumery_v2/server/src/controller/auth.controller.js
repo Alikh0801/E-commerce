@@ -357,6 +357,39 @@ const uptadeMe = async (req, res) => {
     }
 }
 
+const updatePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        const user = await userModel.findById(req.user.id).select('+password');
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+        if (!isMatch) {
+            return res.status(401).json({
+                ok: false,
+                message: 'Cari şifrəniz yanlışdır!'
+            })
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+
+        await user.save();
+
+        res.status(200).json({
+            ok: true,
+            message: 'Şifrəniz uğurla yeniləndi.'
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: 'Internal server error!'
+        })
+    }
+}
+
 module.exports = {
     register,
     login,
@@ -365,5 +398,6 @@ module.exports = {
     verifyEmail,
     forgotPassword,
     resetPassword,
-    uptadeMe
+    uptadeMe,
+    updatePassword
 }

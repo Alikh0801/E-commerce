@@ -9,6 +9,7 @@ import ResetPassword from '../pages/ResetPassword';
 import WishlistPage from '../pages/WishlistPage';
 import CartPage from '../pages/CartPage';
 import ProfilePage from '../pages/ProfilePage';
+import NotFound from '../pages/NotFound';
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
             {
                 path: "/profil-page",
                 element: <ProfilePage />
+            },
+            {
+                path: '*',
+                element: <NotFound />
             }
         ]
     }

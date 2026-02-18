@@ -32,3 +32,7 @@ export const resetPassword = (token, password) => {
 export const updateMe = (data) => {
     return api.patch('/auth/uptade-me', data);
 };
+
+export const updatePassword = (password) => {
+    return api.put('/auth/uptade-password', password)
+}

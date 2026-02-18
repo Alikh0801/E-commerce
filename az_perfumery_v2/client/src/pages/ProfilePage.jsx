@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { User, Mail, Package, Lock, LogOut, Camera, Loader2, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { updateMe } from '../api/authService';
+import { updateMe, updatePassword } from '../api/authService';
 import { useNavigate } from 'react-router-dom';
 
 function ProfilePage() {
@@ -13,6 +13,12 @@ function ProfilePage() {
     const [updateLoading, setUpdateLoading] = useState(false);
     const [status, setStatus] = useState({ type: '', message: '' });
     const [activeTab, setActiveTab] = useState('profile');
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+    const [passwordLoading, setPasswordLoading] = useState(false);
 
     useEffect(() => {
         if (!authLoading && !user) {
@@ -44,6 +50,41 @@ function ProfilePage() {
             });
         } finally {
             setUpdateLoading(false);
+        }
+    };
+
+    const handleUpdatePassword = async (e) => {
+        e.preventDefault();
+        setStatus({ type: '', message: '' });
+
+        if (passwordData.newPassword.length < 8) {
+            setStatus({
+                type: 'error',
+                message: 'Yeni şifrə ən azı 8 simvoldan ibarət olmalıdır!'
+            });
+            return;
+        }
+
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            setStatus({ type: 'error', message: 'Yeni şifrələr eyni deyil!' });
+            return;
+        }
+
+        setPasswordLoading(true);
+        try {
+            const response = await updatePassword(passwordData);
+            if (response.data.ok) {
+                setStatus({ type: 'success', message: 'Şifrəniz uğurla yeniləndi!' });
+                setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                setTimeout(() => setStatus({ type: '', message: '' }), 3000);
+            }
+        } catch (error) {
+            setStatus({
+                type: 'error',
+                message: error.response?.data?.message || 'Xəta baş verdi!'
+            });
+        } finally {
+            setPasswordLoading(false);
         }
     };
 
@@ -95,6 +136,14 @@ function ProfilePage() {
                 <div className="flex-1">
                     <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-8 md:p-12 min-h-125">
 
+                        {status.message && (
+                            <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 animate-in fade-in zoom-in ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
+                                {status.type === 'success' && <CheckCircle2 size={18} />}
+                                <span className="text-sm font-medium">{status.message}</span>
+                            </div>
+                        )}
+
+                        {/* Orders Tab */}
                         {activeTab === 'profile' && (
                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div className="flex justify-between items-center mb-10">
@@ -111,13 +160,6 @@ function ProfilePage() {
                                         </button>
                                     )}
                                 </div>
-
-                                {status.message && (
-                                    <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
-                                        {status.type === 'success' && <CheckCircle2 size={18} />}
-                                        <span className="text-sm font-medium">{status.message}</span>
-                                    </div>
-                                )}
 
                                 <form onSubmit={handleUpdateProfile} className="space-y-8">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -167,6 +209,7 @@ function ProfilePage() {
                             </div>
                         )}
 
+                        {/* Orders Tab */}
                         {activeTab === 'orders' && (
                             <div className="flex flex-col items-center justify-center py-20 animate-in fade-in zoom-in duration-300">
                                 <Package size={60} className="text-gray-100 mb-4" />
@@ -175,17 +218,52 @@ function ProfilePage() {
                             </div>
                         )}
 
+                        {/* Security Tab */}
                         {activeTab === 'security' && (
                             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
                                 <h3 className="text-xl font-bold text-gray-800 mb-8">Təhlükəsizlik Ayarları</h3>
-                                <div className="space-y-6 max-w-md">
-                                    <div className="p-4 bg-orange-50 border border-orange-100 rounded-2xl">
-                                        <p className="text-sm text-orange-800 font-medium">Şifrəni mütəmadi olaraq dəyişmək hesabınızın təhlükəsizliyini təmin edir.</p>
+                                <form onSubmit={handleUpdatePassword} className="space-y-6 max-w-md">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Cari Şifrə</label>
+                                        <input
+                                            type="password"
+                                            required
+                                            value={passwordData.currentPassword}
+                                            onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                                            className="w-full px-6 py-4 rounded-2xl border-2 border-gray-100 outline-none focus:border-[#800000] transition-all"
+                                        />
                                     </div>
-                                    <button className="w-full py-4 border-2 border-gray-100 rounded-2xl font-bold text-gray-700 hover:border-orange-500 hover:text-orange-600 transition-all flex items-center justify-center gap-2 cursor-pointer">
-                                        <Lock size={18} /> Şifrəni Yenilə
+
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Yeni Şifrə</label>
+                                        <input
+                                            type="password"
+                                            required
+                                            value={passwordData.newPassword}
+                                            onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                                            className="w-full px-6 py-4 rounded-2xl border-2 border-gray-100 outline-none focus:border-[#800000] transition-all"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Yeni Şifrə (Təkrar)</label>
+                                        <input
+                                            type="password"
+                                            required
+                                            value={passwordData.confirmPassword}
+                                            onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                                            className="w-full px-6 py-4 rounded-2xl border-2 border-gray-100 outline-none focus:border-[#800000] transition-all"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={passwordLoading}
+                                        className="w-full py-4 bg-[#800000] text-white rounded-2xl font-bold hover:bg-black transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                    >
+                                        {passwordLoading ? <Loader2 className="animate-spin" size={20} /> : 'Şifrəni Yenilə'}
                                     </button>
-                                </div>
+                                </form>
                             </div>
                         )}
 
