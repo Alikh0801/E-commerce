@@ -30,16 +30,16 @@ function LoginPage() {
     };
 
     return (
-        <div className="min-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-50 px-4">
-            <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        <div className="min-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-50 px-4 sm:px-6 py-6 sm:py-8">
+            <div className="max-w-md w-full bg-white rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 md:p-8 border border-gray-100">
 
                 {/* Başlıq */}
-                <div className="text-center mb-10">
-                    <h2 className="text-3xl font-bold text-gray-800">Xoş Gəldiniz!</h2>
+                <div className="text-center mb-8 sm:mb-10">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Xoş Gəldiniz!</h2>
                     <p className="text-gray-500 mt-2">Davam etmək üçün hesabınıza daxil olun</p>
                 </div>
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-5 sm:space-y-6" onSubmit={handleSubmit}>
 
                     {/* Email */}
 
@@ -53,7 +53,7 @@ function LoginPage() {
                                 type="email"
                                 required
                                 placeholder="xxxx@gmail.com"
-                                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all"
+                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-100 transition-all"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
@@ -70,7 +70,7 @@ function LoginPage() {
                                 type={showPassword ? "text" : "password"}
                                 required
                                 placeholder="••••••••"
-                                className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
+                                className="w-full pl-10 pr-12 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
@@ -113,14 +113,14 @@ function LoginPage() {
                     {/* Daxil Ol Butonu */}
                     <button
                         type='submit'
-                        className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-orange-600 transform transition-all active:scale-[0.98] shadow-lg shadow-orange-100">
+                        className="w-full bg-black text-white py-2.5 sm:py-3 rounded-xl font-bold hover:bg-orange-600 transform transition-all active:scale-[0.98] shadow-lg shadow-orange-100 text-sm sm:text-base">
                         Daxil Ol
                     </button>
                 </form>
 
                 {/* Register */}
 
-                <p className="text-center mt-8 text-gray-600">
+                <p className="text-center mt-6 sm:mt-8 text-gray-600 text-sm sm:text-base">
                     Hesabınız yoxdur?{' '}
                     <Link to="/register" className="text-orange-600 font-bold hover:underline">Qeydiyyatdan keçin </Link>
                 </p>

@@ -89,16 +89,16 @@ function ProfilePage() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-10 min-h-[80vh]">
-            <div className="flex flex-col md:flex-row gap-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 min-h-[80vh]">
+            <div className="flex flex-col md:flex-row gap-6 lg:gap-8">
 
                 {/* --- left nav --- */}
-                <div className="w-full md:w-1/4 space-y-4">
-                    <div className="bg-white rounded-4xl shadow-sm border border-gray-100 p-6 text-center">
-                        <div className="relative inline-block mb-4">
-                            <div className="w-24 h-24 bg-linear-to-tr from-[#800000] to-amber-500 p-1 rounded-full shadow-xl">
+                <div className="w-full md:w-64 lg:w-1/4 shrink-0 space-y-4">
+                    <div className="bg-white rounded-2xl sm:rounded-4xl shadow-sm border border-gray-100 p-4 sm:p-6 text-center">
+                        <div className="relative inline-block mb-3 sm:mb-4">
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-tr from-[#800000] to-amber-500 p-1 rounded-full shadow-xl">
                                 <div className="w-full h-full bg-white rounded-full flex items-center justify-center overflow-hidden border-2 border-white">
-                                    <span className="text-3xl font-black text-[#800000]">
+                                    <span className="text-2xl sm:text-3xl font-black text-[#800000]">
                                         {user?.fullName?.[0].toUpperCase()}
                                     </span>
                                 </div>
@@ -107,10 +107,10 @@ function ProfilePage() {
                                 <Camera size={16} />
                             </button>
                         </div>
-                        <h2 className="font-bold text-gray-800 text-lg truncate px-2">{user?.fullName}</h2>
+                        <h2 className="font-bold text-gray-800 text-base sm:text-lg truncate px-2">{user?.fullName}</h2>
                     </div>
 
-                    <nav className="bg-white rounded-4xl shadow-sm border border-gray-100 p-3 space-y-1">
+                    <nav className="bg-white rounded-2xl sm:rounded-4xl shadow-sm border border-gray-100 p-2 sm:p-3 space-y-1">
                         <button
                             onClick={() => setActiveTab('profile')}
                             className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-2xl transition-all ${activeTab === 'profile' ? 'bg-[#800000] text-white shadow-lg shadow-red-100' : 'text-gray-500 hover:bg-gray-50'}`}
@@ -134,7 +134,7 @@ function ProfilePage() {
 
                 {/* --- right nav --- */}
                 <div className="flex-1">
-                    <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-8 md:p-12 min-h-125">
+                    <div className="bg-white rounded-2xl sm:rounded-[2.5rem] shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 lg:p-12 min-h-125">
 
                         {status.message && (
                             <div className={`mb-6 p-4 rounded-2xl flex items-center gap-3 animate-in fade-in zoom-in ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
@@ -146,23 +146,23 @@ function ProfilePage() {
                         {/* Orders Tab */}
                         {activeTab === 'profile' && (
                             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <div className="flex justify-between items-center mb-10">
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8 sm:mb-10">
                                     <div>
-                                        <h3 className="text-2xl font-bold text-gray-800">Şəxsi Məlumatlar</h3>
+                                        <h3 className="text-xl sm:text-2xl font-bold text-gray-800">Şəxsi Məlumatlar</h3>
                                         <p className="text-gray-400 text-sm mt-1">Hesab məlumatlarınızı buradan idarə edə bilərsiniz.</p>
                                     </div>
                                     {!isEditing && (
                                         <button
                                             onClick={() => setIsEditing(true)}
-                                            className="px-5 py-2 text-sm font-bold text-[#800000] border border-red-100 rounded-full hover:bg-red-50 transition-colors"
+                                            className="self-start sm:self-auto px-5 py-2 text-sm font-bold text-[#800000] border border-red-100 rounded-full hover:bg-red-50 transition-colors shrink-0"
                                         >
                                             Düzəliş Et
                                         </button>
                                     )}
                                 </div>
 
-                                <form onSubmit={handleUpdateProfile} className="space-y-8">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <form onSubmit={handleUpdateProfile} className="space-y-6 sm:space-y-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                                         <div className="space-y-2">
                                             <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Tam Ad Soyad</label>
                                             <input
@@ -188,18 +188,18 @@ function ProfilePage() {
                                     </div>
 
                                     {isEditing && (
-                                        <div className="flex items-center gap-4 pt-4">
+                                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-4">
                                             <button
                                                 type="submit"
                                                 disabled={updateLoading}
-                                                className="min-w-35 flex items-center justify-center gap-2 px-8 py-4 bg-black text-white rounded-2xl font-bold hover:bg-[#800000] transition-all disabled:opacity-50"
+                                                className="sm:min-w-35 flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-black text-white rounded-2xl font-bold hover:bg-[#800000] transition-all disabled:opacity-50"
                                             >
                                                 {updateLoading ? <Loader2 className="animate-spin" size={20} /> : 'Yadda Saxla'}
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={() => { setIsEditing(false); setFullName(user.fullName); }}
-                                                className="px-8 py-4 bg-gray-100 text-gray-600 rounded-2xl font-bold hover:bg-gray-200 transition-all"
+                                                className="px-6 sm:px-8 py-3 sm:py-4 bg-gray-100 text-gray-600 rounded-2xl font-bold hover:bg-gray-200 transition-all"
                                             >
                                                 Ləğv Et
                                             </button>
@@ -211,8 +211,8 @@ function ProfilePage() {
 
                         {/* Orders Tab */}
                         {activeTab === 'orders' && (
-                            <div className="flex flex-col items-center justify-center py-20 animate-in fade-in zoom-in duration-300">
-                                <Package size={60} className="text-gray-100 mb-4" />
+                            <div className="flex flex-col items-center justify-center py-12 sm:py-20 animate-in fade-in zoom-in duration-300">
+                                <Package size={56} className="text-gray-100 mb-4" />
                                 <h3 className="text-lg font-bold text-gray-800">Sifarişiniz yoxdur</h3>
                                 <p className="text-gray-400">Hələ ki, heç bir alış-veriş etməmisiniz.</p>
                             </div>
@@ -221,7 +221,7 @@ function ProfilePage() {
                         {/* Security Tab */}
                         {activeTab === 'security' && (
                             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                                <h3 className="text-xl font-bold text-gray-800 mb-8">Təhlükəsizlik Ayarları</h3>
+                                <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-6 sm:mb-8">Təhlükəsizlik Ayarları</h3>
                                 <form onSubmit={handleUpdatePassword} className="space-y-6 max-w-md">
                                     <div className="space-y-2">
                                         <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Cari Şifrə</label>

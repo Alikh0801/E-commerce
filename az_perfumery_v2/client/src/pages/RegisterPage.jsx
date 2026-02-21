@@ -58,15 +58,15 @@ function RegisterPage() {
     };
 
     return (
-        <div className="min-h-[calc(100vh-80px)] overflow-y-auto flex items-center justify-center bg-gray-50 py-12 px-4">
-            <div className="max-w-lg w-full bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        <div className="min-h-[calc(100vh-80px)] overflow-y-auto flex items-center justify-center bg-gray-50 py-6 sm:py-12 px-4 sm:px-6">
+            <div className="max-w-lg w-full bg-white rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 md:p-8 border border-gray-100">
 
-                <div className="text-center mb-10">
-                    <h2 className="text-3xl font-bold text-gray-800">Hesab Yaradın</h2>
+                <div className="text-center mb-8 sm:mb-10">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Hesab Yaradın</h2>
                     <p className="text-gray-500 mt-2">Sürətli alış-veriş üçün qeydiyyatdan keçin</p>
                 </div>
 
-                <form className="space-y-5" onSubmit={handleSubmit}>
+                <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
 
                     {error && (
                         <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 text-red-700 text-sm rounded">
@@ -86,7 +86,7 @@ function RegisterPage() {
                                 type="text"
                                 required
                                 placeholder="Ad və Soyad məlumatlarınızı daxil edin"
-                                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
+                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
                             />
                         </div>
                     </div>
@@ -102,7 +102,7 @@ function RegisterPage() {
                                 onChange={handleChange}
                                 type="email"
                                 placeholder="xxxx@gmail.comm"
-                                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
+                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
                             />
                         </div>
                     </div>
@@ -123,7 +123,7 @@ function RegisterPage() {
                                 type="tel"
                                 required
                                 placeholder="50 000 00 00"
-                                className="w-full pl-24 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
+                                className="w-full pl-24 pr-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
                             />
                         </div>
                     </div>
@@ -139,7 +139,7 @@ function RegisterPage() {
                                 onChange={handleChange}
                                 type={showPassword ? "text" : "password"}
                                 placeholder="••••••••"
-                                className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
+                                className="w-full pl-10 pr-12 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
                             />
                             <button
                                 type="button"
@@ -160,13 +160,13 @@ function RegisterPage() {
                     </div>
 
                     {/* Regisrer Buton */}
-                    <button className="w-full bg-black text-white py-3.5 rounded-xl font-bold hover:bg-orange-600 transform transition-all active:scale-[0.98] shadow-lg shadow-gray-200">
+                    <button className="w-full bg-black text-white py-2.5 sm:py-3.5 rounded-xl font-bold hover:bg-orange-600 transform transition-all active:scale-[0.98] shadow-lg shadow-gray-200 text-sm sm:text-base">
                         Qeydiyyatı Tamamla
                     </button>
                 </form>
 
                 {/* Rout Login */}
-                <p className="text-center mt-8 text-gray-600">
+                <p className="text-center mt-6 sm:mt-8 text-gray-600 text-sm sm:text-base">
                     Artıq hesabınız var?{' '}
                     <a href="/login" className="text-orange-600 font-bold hover:underline">Daxil olun</a>
                 </p>

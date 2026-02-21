@@ -40,10 +40,10 @@ function ForgotPassword() {
     }
 
     return (
-        <div className="min-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-50 px-4">
-            <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-                <div className="text-center mb-10">
-                    <h2 className="text-3xl font-bold text-gray-800">Şifrəni unutmusunuz?</h2>
+        <div className="min-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-50 px-4 sm:px-6 py-6 sm:py-8">
+            <div className="max-w-md w-full bg-white rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 md:p-8 border border-gray-100">
+                <div className="text-center mb-8 sm:mb-10">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Şifrəni unutmusunuz?</h2>
                     <p className="text-gray-500 mt-2">E-mail ünvanınızı daxil edin, sizə təlimat göndərək.</p>
                 </div>
 
@@ -55,7 +55,7 @@ function ForgotPassword() {
                             <input
                                 type="email"
                                 required
-                                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
+                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 focus:bg-white transition-all"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
@@ -71,7 +71,7 @@ function ForgotPassword() {
                     <button
                         type="submit"
                         disabled={status.type === 'loading' || isWaiting}
-                        className={`w-full py-3 rounded-xl font-bold transform transition-all active:scale-[0.98] shadow-lg shadow-orange-100 ${isWaiting || status.type === 'loading'
+                        className={`w-full py-2.5 sm:py-3 rounded-xl font-bold text-sm sm:text-base transform transition-all active:scale-[0.98] shadow-lg shadow-orange-100 ${isWaiting || status.type === 'loading'
                                 ? 'bg-gray-400 cursor-not-allowed text-white'
                                 : 'bg-black text-white hover:bg-orange-600'
                             }`}
@@ -80,7 +80,7 @@ function ForgotPassword() {
                     </button>
                 </form>
 
-                <div className="mt-8 text-center">
+                <div className="mt-6 sm:mt-8 text-center">
                     <Link to="/login" className="text-sm text-gray-500 hover:text-orange-600 flex items-center justify-center gap-2">
                         <ArrowLeft size={16} /> Girişə qayıt
                     </Link>

@@ -30,10 +30,10 @@ function ResetPassword() {
     };
 
     return (
-        <div className="min-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-50 px-4">
-            <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-                <div className="text-center mb-10">
-                    <h2 className="text-3xl font-bold text-gray-800">Yeni Şifrə</h2>
+        <div className="min-h-[calc(90vh-80px)] flex items-center justify-center bg-gray-50 px-4 sm:px-6 py-6 sm:py-8">
+            <div className="max-w-md w-full bg-white rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 md:p-8 border border-gray-100">
+                <div className="text-center mb-8 sm:mb-10">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Yeni Şifrə</h2>
                     <p className="text-gray-500 mt-2">Yeni şifrənizi daxil edin</p>
                 </div>
                 <form className="space-y-6" onSubmit={handleSubmit}>
@@ -42,7 +42,7 @@ function ResetPassword() {
                         <input
                             type={showPassword ? "text" : "password"}
                             required
-                            className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 transition-all"
+                            className="w-full pl-10 pr-12 py-2.5 sm:py-3 text-sm sm:text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-orange-500 transition-all"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -51,7 +51,7 @@ function ResetPassword() {
                         </button>
                     </div>
                     {error && <div className="text-red-600 text-sm text-center">{error}</div>}
-                    <button type="submit" className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-orange-600 transition-all">
+                    <button type="submit" className="w-full bg-black text-white py-2.5 sm:py-3 rounded-xl font-bold text-sm sm:text-base hover:bg-orange-600 transition-all">
                         Şifrəni Yenilə
                     </button>
                 </form>

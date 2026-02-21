@@ -20,11 +20,11 @@ function CartPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center justify-center">
-            <ShoppingCart size={64} className="text-gray-300 mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800">Səbətiniz boşdur</h2>
-            <p className="text-gray-500 mt-2">Görünür hələ heç bir məhsul əlavə etməmisiniz.</p>
-            <Link to="/" className="mt-6 flex items-center gap-2 text-orange-600 font-semibold hover:underline">
+        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center text-center">
+            <ShoppingCart size={56} className="text-gray-300 mb-4 shrink-0" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Səbətiniz boşdur</h2>
+            <p className="text-gray-500 mt-2 text-sm sm:text-base max-w-sm">Görünür hələ heç bir məhsul əlavə etməmisiniz.</p>
+            <Link to="/" className="mt-6 flex items-center justify-center gap-2 text-orange-600 font-semibold hover:underline text-sm sm:text-base">
                 <ArrowLeft size={20} /> Alış-verişə davam et
             </Link>
         </div>
