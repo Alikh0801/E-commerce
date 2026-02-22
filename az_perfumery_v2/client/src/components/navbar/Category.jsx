@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Logs, ChevronDown } from 'lucide-react';
 
-function Category() {
+function Category({ onLinkClick }) {
     const [isOpen, setIsOpen] = useState(false);
+
+    const handleLinkClick = () => {
+        setIsOpen(false);
+        onLinkClick?.();
+    };
 
     return (
         <div className="relative group inline-block">
@@ -20,17 +25,17 @@ function Category() {
             <div className={`absolute left-0 top-full pt-2 w-48 sm:w-56 min-w-48 transition-all z-50 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} group-hover:opacity-100 group-hover:visible`}>
                 <ul className="bg-white border border-gray-200 shadow-xl rounded-lg py-2">
                     <li>
-                        <Link to="/kisi-geyim" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-orange-50 hover:text-[#922c00] transition-colors">
+                        <Link to="/men-perfume" onClick={handleLinkClick} className="block px-4 py-2 hover:bg-orange-50 hover:text-[#922c00] transition-colors">
                             Kişi Ətirləri
                         </Link>
                     </li>
                     <li>
-                        <Link to="/qadin-geyim" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-orange-50 hover:text-[#922c00] transition-colors">
+                        <Link to="/women-perfume" onClick={handleLinkClick} className="block px-4 py-2 hover:bg-orange-50 hover:text-[#922c00] transition-colors">
                             Qadın Ətirləri
                         </Link>
                     </li>
                     <li>
-                        <Link to="/kisi-ayaqqabi" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-orange-50 hover:text-[#922c00] transition-colors">
+                        <Link to="/unisex-perfume" onClick={handleLinkClick} className="block px-4 py-2 hover:bg-orange-50 hover:text-[#922c00] transition-colors">
                             Unisex Ətirlər
                         </Link>
                     </li>

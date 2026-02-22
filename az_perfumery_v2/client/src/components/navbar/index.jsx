@@ -125,20 +125,11 @@ function Navbar() {
                     className={`absolute top-0 right-0 h-full w-full max-w-sm bg-[linear-gradient(180deg,#000033_0%,#000066_100%)] shadow-2xl transition-transform duration-300 ease-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
                         }`}
                 >
-                    <div className="absolute top-4 right-4 z-10">
-                        <button
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="p-2 rounded-lg text-[#F5F5DC] hover:bg-white/10 transition-colors"
-                            aria-label="Bağla"
-                        >
-                            {/* <X size={24} /> */}
-                        </button>
-                    </div>
                     <div className="flex flex-col h-full pt-20 px-6 pb-8">
                         <div className="space-y-6">
                             <div>
                                 <p className="text-xs uppercase tracking-wider text-gray-400 mb-2">Kataloq</p>
-                                <Category />
+                                <Category onLinkClick={() => setMobileMenuOpen(false)} />
                             </div>
                             <div>
                                 <p className="text-xs uppercase tracking-wider text-gray-400 mb-2">Axtarış</p>
