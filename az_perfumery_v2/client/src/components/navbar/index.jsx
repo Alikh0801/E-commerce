@@ -20,12 +20,10 @@ function Navbar() {
     return (
         <nav className="bg-[linear-gradient(90deg,#000033_0%,#000066_100%)] border-b border-gray-100 sticky top-0 z-100">
             <div className="relative z-101 w-full px-4 sm:px-6 lg:px-12 py-3 sm:py-4 lg:py-5 flex items-center justify-between gap-4">
-                {/* Logo */}
                 <a href="/" className="shrink-0 text-[#F5F5DC]">
                     <h1 className="text-base sm:text-lg font-semibold">A&Z Perfumery</h1>
                 </a>
 
-                {/* Desktop: full nav */}
                 <div className="hidden lg:flex items-center flex-1 gap-6 mx-6">
                     <Category />
                     <div className="flex-1 max-w-4xl">
@@ -74,9 +72,12 @@ function Navbar() {
                                     >
                                         Profilim
                                     </Link>
-                                    <a href="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                                    <Link
+                                        to='/settings'
+                                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                                    >
                                         Ayarlar
-                                    </a>
+                                    </Link>
                                     <div className="mt-1 border-t border-gray-50 pt-1">
                                         <button
                                             onClick={logout}
