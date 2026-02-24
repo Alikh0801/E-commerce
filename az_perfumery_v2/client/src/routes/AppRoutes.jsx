@@ -9,6 +9,7 @@ import ResetPassword from '../pages/ResetPassword';
 import WishlistPage from '../pages/WishlistPage';
 import CartPage from '../pages/CartPage';
 import ProfilePage from '../pages/ProfilePage';
+import CategoryPage from '../pages/CategoryPage';
 import NotFound from '../pages/NotFound';
 
 const router = createBrowserRouter([
@@ -51,6 +52,18 @@ const router = createBrowserRouter([
             {
                 path: "/profil-page",
                 element: <ProfilePage />
+            },
+            {
+                path: "/men-perfume",
+                element: <CategoryPage category="men" title="Kişi Ətirləri" />
+            },
+            {
+                path: "/women-perfume",
+                element: <CategoryPage category="women" title="Qadın Ətirləri" />
+            },
+            {
+                path: "/unisex-perfume",
+                element: <CategoryPage category="unisex" title="Unisex Ətirlər" />
             },
             {
                 path: '*',

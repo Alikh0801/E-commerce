@@ -35,4 +35,4 @@ export const updateMe = (data) => {
 
 export const updatePassword = (password) => {
     return api.put('/auth/uptade-password', password)
-}
+};
