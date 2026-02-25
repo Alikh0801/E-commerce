@@ -7,10 +7,16 @@ const cookieParser = require('cookie-parser');
 const app = express();
 dbConnect();
 
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? (process.env.CLIENT_URL || 'https://az-perfumery-v2-uvpk.vercel.app').split(',').map(s => s.trim()).filter(Boolean)
+    : ['http://localhost:5173'];
+
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production'
-        ? ['https://az-perfumery-v2-uvpk.vercel.app']
-        : 'http://localhost:5173',
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(null, false);
+    },
     credentials: true
 }));
 
