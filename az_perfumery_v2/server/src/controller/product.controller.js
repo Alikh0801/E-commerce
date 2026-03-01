@@ -7,6 +7,11 @@ const createProduct = async (req, res) => {
 
         if (req.file) {
             productData.image = req.file.path;
+        } else if (!productData.image) {
+            return res.status(400).json({
+                ok: false,
+                message: 'Şəkil faylı göndərilməyib. Form-data-da "image" key-i ilə fayl seçin (Type: File).'
+            });
         }
 
         if (req.body.options && typeof req.body.options === 'string') {
@@ -88,7 +93,43 @@ const getAllProducts = async (req, res) => {
     }
 };
 
+const getBestsellers = async (req, res) => {
+    try {
+        const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+        const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 12));
+        const skip = (page - 1) * limit;
+
+        const total = await productModel.countDocuments({ bestseller: true });
+        const products = await productModel
+            .find({ bestseller: true })
+            .sort({ bestsellerOrder: 1, createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        const data = products.map((p) => applyDiscountToProduct(p));
+        const totalPages = Math.ceil(total / limit) || 1;
+
+        res.status(200).json({
+            ok: true,
+            data,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     createProduct,
-    getAllProducts
+    getAllProducts,
+    getBestsellers
 }

@@ -81,7 +81,7 @@ function CategoryPage({ category, title }) {
                 products.length === 0 ? (
                     <p className="text-gray-500">Bu kateqoriyada məhsul tapılmadı.</p>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-start">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 items-start">
                         {products.map((p, index) => (
                             <ProductCard
                                 key={p._id ?? `product-${index}`}

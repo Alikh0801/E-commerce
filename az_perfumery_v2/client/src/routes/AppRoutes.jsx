@@ -10,6 +10,7 @@ import WishlistPage from '../pages/WishlistPage';
 import CartPage from '../pages/CartPage';
 import ProfilePage from '../pages/ProfilePage';
 import CategoryPage from '../pages/CategoryPage';
+import BestsellersPage from '../pages/BestsellersPage';
 import NotFound from '../pages/NotFound';
 
 const router = createBrowserRouter([
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
             {
                 path: "/unisex-perfume",
                 element: <CategoryPage category="unisex" title="Unisex Ətirlər" />
+            },
+            {
+                path: "/best-sellers",
+                element: <BestsellersPage />
             },
             {
                 path: '*',
